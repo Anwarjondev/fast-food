@@ -15,16 +15,41 @@ type Config struct {
 	EMAILPassword string
 }
 
-func Load() Config {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file", err)
+// getEnv gets an environment variable or returns a default value
+func getEnv(key, defaultValue string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		return defaultValue
 	}
+	return value
+}
+
+func Load() Config {
+	// Try to load .env file but don't fail if it doesn't exist
+	_ = godotenv.Load()
+
+	// Get required environment variables
+	dbDNS := os.Getenv("DB_DNS")
+	if dbDNS == "" {
+		log.Fatal("DB_DNS environment variable is required")
+	}
+
+	// Get SMTP settings with defaults
+	smtpHost := getEnv("SMTP_HOST", "smtp.gmail.com")
+	smtpPort := getEnv("SMTP_PORT", "587")
+	emailSender := getEnv("EMAIL_SENDER", "")
+	emailPassword := getEnv("EMAIL_PASSWORD", "")
+
+	// Validate email settings if they're not using defaults
+	if emailSender == "" || emailPassword == "" {
+		log.Fatal("EMAIL_SENDER and EMAIL_PASSWORD environment variables are required")
+	}
+
 	return Config{
-		DBNS:          os.Getenv("DB_DNS"),
-		SMPTHost:      os.Getenv("SMTP_HOST"),
-		SMTPPort:      os.Getenv("SMTP_PORT"),
-		EMAILSender:   os.Getenv("EMAIL_SENDER"),
-		EMAILPassword: os.Getenv("EMAIL_PASSWORD"),
+		DBNS:          dbDNS,
+		SMPTHost:      smtpHost,
+		SMTPPort:      smtpPort,
+		EMAILSender:   emailSender,
+		EMAILPassword: emailPassword,
 	}
 }
