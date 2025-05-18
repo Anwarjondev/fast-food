@@ -18,7 +18,7 @@ type Config struct {
 func Load() Config {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal("Error loading .env file", err)
 	}
 	return Config{
 		DBNS:          os.Getenv("DB_DNS"),
