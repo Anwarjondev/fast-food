@@ -85,7 +85,7 @@ func createTables() error {
 			created_at TIMESTAMP,
 			delivered_at TIMESTAMP,
 			user_id INT REFERENCES users(id),
-			status BOOL,
+			status VARCHAR,
 			total_amount NUMERIC
 		)
 	`)
