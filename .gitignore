@@ -32,8 +32,6 @@ go.work
 .DS_Store
 Thumbs.db
 
-# Swagger docs
-docs/
 
 # Build output
 bin/

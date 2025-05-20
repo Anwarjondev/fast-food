@@ -1,0 +1,436 @@
+basePath: /
+definitions:
+  handlers.ConfirmRequest:
+    properties:
+      code:
+        type: integer
+    type: object
+  handlers.CreateOrderInput:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/repository.OrderDetail'
+        type: array
+    type: object
+  handlers.ForgotPasswordRequest:
+    properties:
+      email:
+        type: string
+    type: object
+  handlers.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  handlers.RegisterRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  handlers.ResendCodeRequest:
+    properties:
+      email:
+        type: string
+    type: object
+  handlers.ResetPasswordRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  repository.Category:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  repository.Food:
+    properties:
+      category_id:
+        type: integer
+      count_food:
+        type: integer
+      id:
+        type: integer
+      img_url:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+  repository.Order:
+    properties:
+      created_at:
+        type: string
+      delivered_at:
+        type: string
+      id:
+        type: integer
+      status:
+        type: string
+      total_price:
+        type: number
+      user_id:
+        type: integer
+    type: object
+  repository.OrderDetail:
+    properties:
+      count:
+        type: integer
+      food_id:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: A Fast Food ordering service API in Go using Gin framework.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Fast Food API
+  version: "1.0"
+paths:
+  /categories:
+    get:
+      description: Get list of all food categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/repository.Category'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get all categories
+      tags:
+      - categories
+  /categories/{id}:
+    get:
+      description: Get category details by ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/repository.Category'
+      security:
+      - BearerAuth: []
+      summary: Get category by ID
+      tags:
+      - categories
+  /categories/{id}/foods:
+    get:
+      description: Get list of foods in a category
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/repository.Food'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get foods by category
+      tags:
+      - categories
+  /confirm:
+    post:
+      consumes:
+      - application/json
+      description: Confirm user registration with code
+      parameters:
+      - description: Confirmation request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.ConfirmRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Confirm user registration
+      tags:
+      - auth
+  /forgot-password:
+    post:
+      consumes:
+      - application/json
+      description: Request password reset
+      parameters:
+      - description: Forgot password request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.ForgotPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Forgot password
+      tags:
+      - auth
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login with email and password
+      parameters:
+      - description: Login credentials
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: User login
+      tags:
+      - auth
+  /logout:
+    post:
+      description: Logout user and invalidate token
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: User logout
+      tags:
+      - auth
+  /orders:
+    post:
+      consumes:
+      - application/json
+      description: Create a new food order
+      parameters:
+      - description: Order details
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateOrderInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create new order
+      tags:
+      - orders
+  /orders/{order_id}:
+    put:
+      description: Cancel an existing order
+      parameters:
+      - description: Order ID
+        in: path
+        name: order_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Cancel order
+      tags:
+      - orders
+  /orders/active:
+    get:
+      description: Get list of orders by status (active, completed, all)
+      parameters:
+      - description: Order status (active, completed, all)
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/repository.Order'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get orders by status
+      tags:
+      - orders
+  /orders/all:
+    get:
+      description: Get list of orders by status (active, completed, all)
+      parameters:
+      - description: Order status (active, completed, all)
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/repository.Order'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get orders by status
+      tags:
+      - orders
+  /orders/completed:
+    get:
+      description: Get list of orders by status (active, completed, all)
+      parameters:
+      - description: Order status (active, completed, all)
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/repository.Order'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get orders by status
+      tags:
+      - orders
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with email and password
+      parameters:
+      - description: User registration info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register a new user
+      tags:
+      - auth
+  /resend-code:
+    post:
+      consumes:
+      - application/json
+      description: Resend confirmation code to user's email
+      parameters:
+      - description: Resend code request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.ResendCodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Resend confirmation code
+      tags:
+      - auth
+  /reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Reset password with code
+      parameters:
+      - description: Reset password request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.ResetPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Reset password
+      tags:
+      - auth
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
