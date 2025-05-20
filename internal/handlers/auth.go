@@ -36,10 +36,6 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
-// LogoutRequest represents the request body for user logout
-type LogoutRequest struct {
-	// No fields needed as we'll use the token from Authorization header
-}
 
 // ForgotPasswordRequest represents the request body for password reset request
 type ForgotPasswordRequest struct {
@@ -57,6 +53,15 @@ type ResendCodeRequest struct {
 	Email string `json:"email"`
 }
 
+// Register godoc
+// @Summary Register a new user
+// @Description Register a new user with email and password
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param user body RegisterRequest true "User registration info"
+// @Success 200 {object} map[string]interface{}
+// @Router /register [post]
 func Register(c *gin.Context) {
 	var req RegisterRequest
 	if err := c.BindJSON(&req); err != nil {
@@ -89,6 +94,15 @@ func Register(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Code sent to email"})
 }
 
+// Confirm godoc
+// @Summary Confirm user registration
+// @Description Confirm user registration with code
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body ConfirmRequest true "Confirmation request"
+// @Success 200 {object} map[string]interface{}
+// @Router /confirm [post]
 func Confirm(c *gin.Context) {
 	var req ConfirmRequest
 	if err := c.BindJSON(&req); err != nil {
@@ -113,6 +127,15 @@ func Confirm(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "account verified"})
 }
 
+// Login godoc
+// @Summary User login
+// @Description Login with email and password
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body LoginRequest true "Login credentials"
+// @Success 200 {object} map[string]interface{}
+// @Router /login [post]
 func Login(c *gin.Context) {
 	var req LoginRequest
 	token := uuid.New().String()
@@ -130,6 +153,13 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "login successful", "Token": token})
 }
 
+// Logout godoc
+// @Summary User logout
+// @Description Logout user and invalidate token
+// @Tags auth
+// @Security BearerAuth
+// @Success 200 {object} map[string]interface{}
+// @Router /logout [post]
 func Logout(c *gin.Context) {
 	// Get user ID from the context (set by AuthMiddleware)
 	userID := c.GetInt("user_id")
@@ -146,6 +176,15 @@ func Logout(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "logout successful"})
 }
 
+// ForgotPassword godoc
+// @Summary Forgot password
+// @Description Request password reset
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body ForgotPasswordRequest true "Forgot password request"
+// @Success 200 {object} map[string]interface{}
+// @Router /forgot-password [post]
 func ForgotPassword(c *gin.Context) {
 	var req ForgotPasswordRequest
 	if err := c.BindJSON(&req); err != nil {
@@ -174,6 +213,15 @@ func ForgotPassword(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "New code sent to email"})
 }
 
+// ResetPassword godoc
+// @Summary Reset password
+// @Description Reset password with code
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body ResetPasswordRequest true "Reset password request"
+// @Success 200 {object} map[string]interface{}
+// @Router /reset-password [post]
 func ResetPassword(c *gin.Context) {
 	var req ResetPasswordRequest
 	if err := c.BindJSON(&req); err != nil {
@@ -199,6 +247,15 @@ func ResetPassword(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Password reset successful"})
 }
 
+// ResendCode godoc
+// @Summary Resend confirmation code
+// @Description Resend confirmation code to user's email
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body ResendCodeRequest true "Resend code request"
+// @Success 200 {object} map[string]interface{}
+// @Router /resend-code [post]
 func ResendCode(c *gin.Context) {
 	var req ResendCodeRequest
 	if err := c.BindJSON(&req); err != nil {

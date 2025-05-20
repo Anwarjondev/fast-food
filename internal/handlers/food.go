@@ -8,6 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetFoodsByCategory godoc
+// @Summary Get foods by category
+// @Description Get list of foods in a category
+// @Tags categories
+// @Security BearerAuth
+// @Produce json
+// @Param id path int true "Category ID"
+// @Success 200 {object} []repository.Food
+// @Router /categories/{id}/foods [get]
 func GetFoodsByCategory(c *gin.Context) {
 	categoryIDStr := c.Param("id")
 	categoryID, err := strconv.Atoi(categoryIDStr)

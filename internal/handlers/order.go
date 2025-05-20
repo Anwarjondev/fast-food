@@ -12,6 +12,16 @@ type CreateOrderInput struct {
 	Items []repository.OrderDetail `json:"items"`
 }
 
+// CreateOrder godoc
+// @Summary Create new order
+// @Description Create a new food order
+// @Tags orders
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param order body CreateOrderInput true "Order details"
+// @Success 200 {object} map[string]interface{}
+// @Router /orders [post]
 func CreateOrder(c *gin.Context) {
 	userID := c.GetInt("user_id")
 	var input CreateOrderInput
@@ -29,11 +39,17 @@ func CreateOrder(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"order_id": orderID})
 }
 
-// GetOrderByStatus returns a handler for getting orders by their status
-// This is used for three different routes:
-// - GET /orders/active
-// - GET /orders/completed
-// - GET /orders/all
+// GetOrderByStatus godoc
+// @Summary Get orders by status
+// @Description Get list of orders by status (active, completed, all)
+// @Tags orders
+// @Security BearerAuth
+// @Produce json
+// @Param status query string false "Order status (active, completed, all)"
+// @Success 200 {object} []repository.Order
+// @Router /orders/active [get]
+// @Router /orders/completed [get]
+// @Router /orders/all [get]
 func GetOrderByStatus(status string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userID := c.GetInt("user_id")
@@ -46,6 +62,15 @@ func GetOrderByStatus(status string) gin.HandlerFunc {
 	}
 }
 
+// CancelOrder godoc
+// @Summary Cancel order
+// @Description Cancel an existing order
+// @Tags orders
+// @Security BearerAuth
+// @Produce json
+// @Param order_id path int true "Order ID"
+// @Success 200 {object} map[string]interface{}
+// @Router /orders/{order_id} [put]
 func CancelOrder(c *gin.Context) {
 	userID := c.GetInt("user_id")
 	orderID := c.Param("order_id")

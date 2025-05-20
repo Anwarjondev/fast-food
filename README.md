@@ -11,6 +11,7 @@ A RESTful API for a fast food ordering system built with Go and Gin framework.
 - Food Items by Category
 - Order Management
 - Order Status Tracking
+- **Swagger API Documentation**
 
 ## Prerequisites
 
@@ -20,7 +21,7 @@ A RESTful API for a fast food ordering system built with Go and Gin framework.
 
 ## Environment Variables
 
-Create a `.env` file in the root directory with the following variables:
+Create a `.env` file in the root directory with the following variables (or set them in your deployment environment, e.g., Railway):
 
 ```env
 DB_DNS=postgres://username:password@localhost:5432/dbname
@@ -47,6 +48,16 @@ go mod download
 ```bash
 go run main.go
 ```
+
+## API Documentation (Swagger)
+
+After running the application, access the Swagger UI at:
+
+```
+http://localhost:8080/swagger/index.html
+```
+
+This provides interactive documentation for all endpoints.
 
 ## API Endpoints
 
@@ -80,6 +91,10 @@ The application uses PostgreSQL with the following main tables:
 - food
 - orders
 - order_detail
+
+## Deployment
+
+You can deploy this app to [Railway](https://railway.app/) or any platform that supports Go. Set environment variables in the platform's dashboard as needed.
 
 ## License
 
