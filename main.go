@@ -41,7 +41,13 @@ func main() {
 	r.Use(gin.Logger(), gin.Recovery())
 
 	// Add CORS middleware
-	r.Use(cors.Default())
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
 	// Swagger documentation
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
