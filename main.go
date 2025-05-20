@@ -25,7 +25,8 @@ import (
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host      localhost:8080
+// @host      https://fast-food-production-1c5c.up.railway.app/
+// @schemes   https
 // @BasePath  /
 
 // @securityDefinitions.apikey BearerAuth

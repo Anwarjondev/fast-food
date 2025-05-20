@@ -87,7 +87,7 @@ definitions:
       food_id:
         type: integer
     type: object
-host: localhost:8080
+host: https://fast-food-production-1c5c.up.railway.app/
 info:
   contact:
     email: support@swagger.io
@@ -427,6 +427,8 @@ paths:
       summary: Reset password
       tags:
       - auth
+schemes:
+- https
 securityDefinitions:
   BearerAuth:
     description: Type "Bearer" followed by a space and JWT token.

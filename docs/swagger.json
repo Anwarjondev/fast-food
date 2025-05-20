@@ -1,4 +1,7 @@
 {
+    "schemes": [
+        "https"
+    ],
     "swagger": "2.0",
     "info": {
         "description": "A Fast Food ordering service API in Go using Gin framework.",
@@ -15,7 +18,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "https://fast-food-production-1c5c.up.railway.app/",
     "basePath": "/",
     "paths": {
         "/categories": {
