@@ -113,12 +113,14 @@ func Confirm(c *gin.Context) {
 	// Find user ID by code
 	userID, err := repository.GetUserIDByCode(req.Code)
 	if err != nil {
+		fmt.Println(err)
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
 	ok, err := repository.CheckCode(userID, req.Code)
 	if err != nil || !ok {
+		fmt.Println(err)
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}

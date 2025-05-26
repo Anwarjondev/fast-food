@@ -79,8 +79,7 @@ func GetUserIDByCode(code int) (int, error) {
 		SELECT user_id 
 		FROM confirm 
 		WHERE code = $1 
-		AND is_passwed = false 
-		AND created_at > NOW() - INTERVAL '1 minute'
+		AND is_passwed = false
 	`, code)
 	return userID, err
 }
